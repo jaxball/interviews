@@ -11,6 +11,7 @@ A quick study sheet I use as a refresher :smile:
 - [Math](#math)
 - [Common Problems](#common-problems)
 - [Just Python Things](#just-python-things)
+- [Java Cheatsheet](#java-cheatsheet)
 - [Problem-solving Strategies](#problem-solving-strategies)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -89,8 +90,14 @@ A quick study sheet I use as a refresher :smile:
 ### Hash Table
 * **Hash function**: a function mapping an object to an integer such that if `a==b`, `H(a)==H(b)`
 * A *hash table* is an array whose indices correspond to results from a hash function (implemented as a dictionary in Python)
-* Provides `O(1)` lookup
-* Collision resolution & table doubling
+* Provides `O(1)` lookup, assuming load factor is small enough
+* Load factor - `n/k`, where `n` is number of entries and `k` is number of buckets
+* Collision resolution
+  * Chaining (e.g. with linked lists)
+  * Open addressing (e.g. with linear probing, quadratic probing, or double hashing)
+* Table doubling - choose a new hash function to map to the new size and insert elements from old table into new table
+* Simple uniform hashing assumption (SUHA) - a hash function maps to any slot with equal probability
+* Universal hashing, perfect hashing
 
 ### Heap
 * Special tree where nodes have higher (in the case of a min-heap) values than their parents
@@ -102,6 +109,8 @@ A quick study sheet I use as a refresher :smile:
 
 ### Graph
 * Collection of nodes and edges
+* Cycle - path that loops onto itself
+* Topological sort - in DAG, linear ordering of vertices such that directional constraints are preserved (generate using DFS, prepend to output list)
 * **Spanning tree**: a tree that includes all nodes in the graph
   * **Minimum spanning tree**: a spanning tree with minimum total edge weights
 
@@ -230,7 +239,9 @@ Inspiration from [here](https://quizlet.com/22436874/oop-vocabulary-object-orien
 * *Polymorphism*: different classes in a program can respond to the same message in different ways; useful when an object's class can't be determined at compile time
 
 ### Concurrency
-* TODO
+* Starting with a single-threaded program, threads can spawn new threads
+* *Data races*: bugs in concurrent programs resulting from concurrent access to shared objects
+* Ways to prevent data races: protect objects with locks so that only one thread can access an object at once, or use a special hyperobject
 
 ### Design Patterns
 * *Model-view-controller*: model stores data, controller updates model, view generates user interface
@@ -260,6 +271,7 @@ Inspiration from [here](https://quizlet.com/22436874/oop-vocabulary-object-orien
 * 403 Forbidden: request understood but not fulfilled, authorization will not help
 * 404 Not Found: URI could not be matched
 * 408 Request Timeout: server did not receive a timely response from client
+* 418 I'm a teapot: the resulting entity body *may* be short and stout
 * 500 Internal Server Error: server exception
 * 503 Service Unavailable: server unable to handle the request (temporary)
 * 504 Gateway Timeout: server did not receive a timely response from upstream server
@@ -270,8 +282,16 @@ Inspiration from [here](https://quizlet.com/22436874/oop-vocabulary-object-orien
 ### Recursion
 * [*Master theorem*](https://en.wikipedia.org/wiki/Master_theorem): is most work performed in the root node, in the leaves, or evenly distributed in the rows of the recursion tree?
 
-### Linux
-* TODO
+### Terminal Commands
+* Basic commands: `ls`, `cd`, `mkdir`,`touch`, `cp`, `mv`, `rm`, `pwd`, `chmod`, `chown`, `man`
+* `ping`: ping a server, used for network diagnostics
+* `ps`: display info about processes running on the system
+* `grep`: searches through files for lines matching a given regular expression
+* `tar`, `zip`, `unzip`: make and open compressed archives
+* `curl`: send requests to web servers
+* `wget`: download files from the web (can do recursively)
+* `dig`: query over DNS
+* `crontab`: use Cron to schedule recurring tasks
 
 ### Git
 * `init`: creates/initializes `.git` folder in current directory
@@ -290,12 +310,14 @@ Inspiration from [here](https://quizlet.com/22436874/oop-vocabulary-object-orien
 * `remote`: manage tracked remote repos
 * `reset`: reset current HEAD to a different state
 
+## Math
+
 ### Combinatorics
 * `n(n-1)/2`: number of handshakes in a group
 * `n-1`: number of rounds in a knockout tournament
 * `2^k`: number of binary strings of length `k`
-* `n!/(n-r)!`: permutations of `n` items taken `k` at a time
-* `n!/(r!(n-r)!)`: combinations of `n` items taken `k` at a time
+* `n!/(n-k)!`: permutations of `n` items taken `k` at a time
+* `n!/(k!(n-k)!)`: combinations of `n` items taken `k` at a time
 
 ## Common Problems
 Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/programming-interview-questions/).
@@ -351,6 +373,8 @@ Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/progr
 * **Balanced partition**: given a set of numbers, partition them so that the sums of the partitions are as close as possible
   * Greedy method: iterate through sorted list and add items to the smaller-sum partition
   * Dynamic programming: determine if a subset of the input sums to `n/2` (where `n` is the sum of the input numbers)
+* **LRU Cache**: implement a least-recently used cache
+  * Use two data structures: queue (implemented using doubly linked list) and hash table. Queue contains pages in access order & hash map maps pages to queue node
 
 ## Just Python Things
 ### Strings
@@ -361,6 +385,8 @@ Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/progr
 * `s.join(iter)`: join items in iterable, separated by `s`
 * `s.strip([chars])`: removing leading and trailing characters
 * `s.replace(old,new[,count])`: returns copy of `s` with `old` replaced by `new`
+* `s.isalpha()`: returns `True` if all characters in `s` are alphabetic
+* `s.isdigit()`: returns `True` if all characters in `s` are digits
 
 ### Lists
 * `l=[]`: initialize
@@ -398,6 +424,19 @@ Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/progr
 * `d.items()`: return a list of `(key,value)` tuples
 * `d.keys()`: return a list of dicionary keys
 * `d.values()`: return a list of dictionary values
+
+### Classes
+```Python
+class Node:
+  def __init__(self, val, parent):
+    self.val = val
+    self.parent = parent
+    self.children = []
+  def add_child(self, child):
+    self.children.append(child)
+    
+n = Node("root", None)
+```
 
 ### Non-Decimal Numbers
 * Binary numbers: preface with `0b`; use `bin(int)` to convert
@@ -460,10 +499,12 @@ Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/progr
 ### Other
 * Infinity: `float("inf")`
 * Simultaneous assignment: `a,b = b,a` to swap
-* `lambda x: <body>`: lambda function; don't need return statement
-* Tuples are immutable lists
-* `zip()`
+* `lambda x: <body>`: lambda function; don't need return statement (last value is return value)
+* Tuples are immutable lists; strings are also immutable
+* `zip()`: combine multiple lists into single list of tuples
 * Four numeric types: `int`, `long`, `float`, `complex`
+* **Logical operations**: `and`, `or`, `not`
+* `is` vs `==`: former for object identity, latter for object equality
 * **Falsey values**:
   * `None`
   * `False`
@@ -471,3 +512,62 @@ Lots of these taken from [this blog](http://www.ardendertat.com/2012/01/09/progr
   * Empty sequences & mappings
   * When `__nonzero__()` returns `False`
   * When `__len__()` returns zero for a user-defined class
+* People like the word "Pythonic"
+
+## Java Cheatsheet
+### Program structure
+```Java
+public class Program {
+  // main
+  public static void main(String[] args) {
+    Hello h = new Hello("hi");
+    System.out.println(h);
+  }
+}
+```
+```Java
+public class Hello {
+  private String text; // private instance variable
+  // constructor
+  public Hello(String helloText) {
+    text = helloText;
+  }
+  public String toString() {
+    return "Hello" + text;
+  }
+}
+```
+### Data Types
+* Primitive: `int`, `double`, `boolean`, `char`, `byte`, `short`, `long`, `float`
+* Also `Integer`, `Double`, 'Character', `String` classes
+  * Note that `char` literals have single quotes and `String` literals have double quotes
+* Arrays: use `[]` after type name (fixed length, `length` variable)
+* Interfaces -> concrete classes: 
+  * `List` -> `ArrayList`, `LinkedList` (variable length, `size()` method, can't store primitives)
+  * `Set` -> `HashSet`, `LinkedHashSet`, `TreeSet`
+  * `Map` -> `HashMap`, `LinkedHashMap`, `TreeMap`
+* `Collection` parent interface of `Set`, `List`, `Queue`, `Deque`
+* Others: `File`, `Math`, `Scanner`, `StringTokenizer`
+* `Object` class at the top of the hierarchy
+
+Inspired by http://introcs.cs.princeton.edu/java/11cheatsheet/
+
+## Problem-solving Strategies
+General categories of problems
+* Straight-forward instruction following
+* String manipulation
+* Tree traversal
+* Graph search
+* Dynamic programming
+
+Approaching coding interview questions
+* Be thorough and verbalize your thought process (esp if you're stuck!)
+* First, clarify the question and any assumptions you're making about input/output/behavior
+* Walk through potential solutions (if you can think of multiple with different runtime/space requirements, explain the tradeoffs and pick the one you'll implement)
+* Write out the function header & return value type
+* Implement the function body, explaining your code as you go & mentioning any invariants
+* When you're done, say so and walk through simple examples
+* Write out some test cases, esp edge cases
+* Talk about the runtime and space requirements of your solution
+
+See https://www.topcoder.com/community/data-science/data-science-tutorials/how-to-find-a-solution/
